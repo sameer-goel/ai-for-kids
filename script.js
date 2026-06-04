@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initModal();
     initForm();
+    initChatDemo();
 });
 
 function initModal() {
@@ -105,4 +106,126 @@ function initForm() {
             alert('Network error. Please try again.');
         });
     });
+}
+
+function initChatDemo() {
+    const chatBad = document.getElementById('chatBad');
+    const chatGood = document.getElementById('chatGood');
+    const replayBtn = document.getElementById('replayBtn');
+    if (!chatBad || !chatGood) return;
+
+    let hasPlayed = false;
+    let timeouts = [];
+
+    function showTyping(container) {
+        const typing = document.createElement('div');
+        typing.className = 'typing-indicator';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        container.appendChild(typing);
+        container.scrollTop = container.scrollHeight;
+        return typing;
+    }
+
+    function typeText(element, text, callback) {
+        element.textContent = '';
+        element.classList.add('visible');
+        let i = 0;
+        const speed = 30 + Math.random() * 20;
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                const container = element.closest('.chat-body');
+                if (container) container.scrollTop = container.scrollHeight;
+                const t = setTimeout(type, speed + (Math.random() * 15));
+                timeouts.push(t);
+            } else if (callback) {
+                callback();
+            }
+        }
+        type();
+    }
+
+    function animateChat(container) {
+        const messages = container.querySelectorAll('.chat-msg, .chat-outcome');
+        messages.forEach(msg => {
+            msg.classList.remove('visible');
+            const span = msg.querySelector('span');
+            if (span && !span.dataset.original) {
+                span.dataset.original = span.textContent;
+            }
+        });
+
+        messages.forEach(msg => {
+            const delay = parseInt(msg.dataset.delay) || 0;
+            const isAi = msg.classList.contains('ai');
+            const isUser = msg.classList.contains('user');
+            const span = msg.querySelector('span');
+            const originalText = span ? span.dataset.original : '';
+
+            if (isUser) {
+                const t = setTimeout(() => {
+                    const inputIndicator = document.createElement('div');
+                    inputIndicator.className = 'user-typing-indicator';
+                    inputIndicator.innerHTML = '<span class="cursor-blink"></span>';
+                    container.appendChild(inputIndicator);
+                    container.scrollTop = container.scrollHeight;
+
+                    const t2 = setTimeout(() => {
+                        inputIndicator.remove();
+                        msg.classList.add('visible');
+                        if (span) span.textContent = '';
+                        typeText(span, originalText);
+                        container.scrollTop = container.scrollHeight;
+                    }, 600);
+                    timeouts.push(t2);
+                }, delay);
+                timeouts.push(t);
+            } else if (isAi) {
+                const typingTimeout = setTimeout(() => {
+                    const typing = showTyping(container);
+                    const revealTimeout = setTimeout(() => {
+                        typing.remove();
+                        msg.classList.add('visible');
+                        if (span) span.textContent = '';
+                        typeText(span, originalText);
+                        container.scrollTop = container.scrollHeight;
+                    }, 900);
+                    timeouts.push(revealTimeout);
+                }, delay);
+                timeouts.push(typingTimeout);
+            } else {
+                const t = setTimeout(() => {
+                    msg.classList.add('visible');
+                    container.scrollTop = container.scrollHeight;
+                }, delay);
+                timeouts.push(t);
+            }
+        });
+    }
+
+    function startDemo() {
+        timeouts.forEach(t => clearTimeout(t));
+        timeouts = [];
+        animateChat(chatBad);
+        animateChat(chatGood);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !hasPlayed) {
+                hasPlayed = true;
+                startDemo();
+            }
+        });
+    }, { threshold: 0.3 });
+
+    observer.observe(document.querySelector('.chat-demo-section'));
+
+    if (replayBtn) {
+        replayBtn.addEventListener('click', () => {
+            hasPlayed = true;
+            startDemo();
+        });
+    }
 }
