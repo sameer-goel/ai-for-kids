@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI for Kids - Parent Controls Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F8FDF9;
+      --card: #FFFFFF;
+      --primary: #2E8B57;
+      --primary-light: #3DA86B;
+      --green-deep: #1B5E3A;
+      --green-soft: #E8F5E9;
+      --purple: #7C3AED;
+      --purple-soft: #EDE9FE;
+      --orange: #F59E0B;
+      --orange-soft: #FEF3C7;
+      --blue: #3B82F6;
+      --blue-soft: #DBEAFE;
+      --text: #1A2E23;
+      --text-light: #4A6B5A;
+      --text-muted: #7A9B8A;
+      --border: rgba(46,139,87,0.1);
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    .page-header {
+      text-align: center;
+      padding: 60px 0 40px;
+    }
+
+    .page-header .badge {
+      display: inline-block;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .page-header h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Device Frame - Laptop */
+    .device-frame {
+      max-width: 780px;
+      margin: 0 auto 60px;
+    }
+
+    .device-top-bar {
+      background: #2d2d2d;
+      border-radius: 12px 12px 0 0;
+      padding: 8px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .device-camera {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #555;
+    }
+
+    .device-toolbar {
+      background: #f0f0f0;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 4px solid #2d2d2d;
+      border-right: 4px solid #2d2d2d;
+    }
+
+    .toolbar-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .toolbar-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .toolbar-dots span:nth-child(1) { background: #FF5F57; }
+    .toolbar-dots span:nth-child(2) { background: #FEBC2E; }
+    .toolbar-dots span:nth-child(3) { background: #28C840; }
+
+    .toolbar-url {
+      flex: 1;
+      background: white;
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: #666;
+      font-family: monospace;
+    }
+
+    .device-screen {
+      background: var(--card);
+      overflow: hidden;
+      min-height: 540px;
+      position: relative;
+      border-left: 4px solid #2d2d2d;
+      border-right: 4px solid #2d2d2d;
+    }
+
+    .device-bottom {
+      background: #c8c8c8;
+      border-radius: 0 0 12px 12px;
+      padding: 6px 0 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .device-touchpad {
+      width: 120px;
+      height: 6px;
+      background: #b0b0b0;
+      border-radius: 3px;
+    }
+
+    /* App Header */
+    .app-header {
+      background: var(--primary);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .app-header h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .app-header .parent-badge {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+
+    /* Child Profile */
+    .child-profile {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .child-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-soft), var(--blue-soft));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .child-info h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .child-info p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Settings Sections */
+    .settings-body {
+      padding: 16px 20px;
+    }
+
+    .setting-section {
+      margin-bottom: 20px;
+    }
+
+    .setting-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .setting-card {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .setting-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 12px rgba(46,139,87,0.08);
+    }
+
+    .setting-card.active {
+      border-color: var(--primary);
+      background: var(--green-soft);
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .setting-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .setting-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .setting-icon.green { background: var(--green-soft); }
+    .setting-icon.purple { background: var(--purple-soft); }
+    .setting-icon.orange { background: var(--orange-soft); }
+    .setting-icon.blue { background: var(--blue-soft); }
+
+    .setting-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .setting-desc {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Toggle */
+    .toggle {
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      background: #ddd;
+      position: relative;
+      transition: background var(--transition);
+      cursor: pointer;
+    }
+
+    .toggle.on { background: var(--primary); }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      top: 2px;
+      left: 2px;
+      transition: transform var(--transition);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle.on::after { transform: translateX(18px); }
+
+    /* Slider */
+    .slider-container {
+      margin-top: 10px;
+      padding: 0 4px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e0e0e0;
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .slider-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--primary);
+      transition: width 0.6s ease;
+    }
+
+    .slider-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--primary);
+      position: absolute;
+      top: -5px;
+      transition: left 0.6s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Prompt Cards */
+    .prompt-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.5;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .prompt-card.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .prompt-card .prompt-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    .prompt-tag.active { background: var(--green-soft); color: var(--green-deep); }
+    .prompt-tag.custom { background: var(--purple-soft); color: var(--purple); }
+
+    /* Comparison Layout */
+    .compare-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 60px;
+      align-items: start;
+    }
+
+    .compare-panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .compare-panel h3 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .compare-panel .panel-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .compare-panel.chatgpt { border-top: 4px solid #6B7280; }
+    .compare-panel.aiforkids { border-top: 4px solid var(--primary); }
+
+    .step-list {
+      list-style: none;
+    }
+
+    .step-list li {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .chatgpt .step-num { background: #F3F4F6; color: #6B7280; }
+    .aiforkids .step-num { background: var(--green-soft); color: var(--green-deep); }
+
+    .chatgpt-prompt {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.78rem;
+      font-family: monospace;
+      color: #374151;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    .chatgpt-prompt strong { color: #111; }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      text-align: center;
+      padding: 60px 0 80px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--green-soft) 100%);
+    }
+
+    .bottom-cta h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .bottom-cta p {
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 16px rgba(46,139,87,0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46,139,87,0.3);
+    }
+
+    /* Section titles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    /* Dashboard */
+    .dashboard-body {
+      padding: 20px;
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .dash-stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .dash-stat-number {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .dash-stat-number.up { color: var(--primary); }
+
+    .dash-stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .dash-stat-change {
+      font-size: 0.6rem;
+      font-weight: 600;
+    }
+
+    .dash-stat-change.positive { color: var(--primary); }
+
+    .dash-section {
+      margin-bottom: 24px;
+    }
+
+    .dash-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Bar Chart */
+    .dash-chart {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      position: relative;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 120px;
+      padding-bottom: 24px;
+    }
+
+    .chart-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .chart-bar {
+      width: 100%;
+      max-width: 36px;
+      background: linear-gradient(180deg, var(--primary) 0%, #3DA86B 100%);
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      transition: height 1s ease;
+    }
+
+    .chart-bar.highlight {
+      background: linear-gradient(180deg, #1B5E3A 0%, var(--primary) 100%);
+      box-shadow: 0 2px 8px rgba(46,139,87,0.3);
+    }
+
+    .chart-bar span {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chart-label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .chart-baseline {
+      position: absolute;
+      bottom: 40px;
+      left: 16px;
+      right: 16px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Skills */
+    .skill-rows {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 40px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .skill-row:last-child { margin-bottom: 0; }
+
+    .skill-name {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .skill-bar {
+      height: 8px;
+      background: #e8e8e8;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #3DA86B);
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    .skill-score {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: right;
+    }
+
+    /* Highlights */
+    .highlight-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .highlight-card {
+      display: flex;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .highlight-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .highlight-card strong {
+      display: block;
+      font-size: 0.78rem;
+      margin-bottom: 3px;
+    }
+
+    .highlight-card p {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Parent Tip */
+    .parent-tip {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--orange-soft);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-sm);
+    }
+
+    .tip-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .parent-tip strong {
+      display: block;
+      font-size: 0.78rem;
+      color: #92400E;
+      margin-bottom: 3px;
+    }
+
+    .parent-tip p {
+      font-size: 0.72rem;
+      color: #78350F;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .compare-layout { grid-template-columns: 1fr; }
+      .device-frame { max-width: 100%; }
+      .dash-stats { grid-template-columns: 1fr; }
+      .skill-row { grid-template-columns: 100px 1fr 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="page-header">
+    <span class="badge">Prototype</span>
+    <h1>Parents are in control.</h1>
+    <p>Configure exactly how AI interacts with your child. Boost critical thinking, set boundaries, customize everything.</p>
+  </div>
+
+  <div class="container">
+    <!-- Animated Laptop Mockup -->
+    <div class="device-frame">
+      <div class="device-top-bar"><div class="device-camera"></div></div>
+      <div class="device-toolbar">
+        <div class="toolbar-dots"><span></span><span></span><span></span></div>
+        <div class="toolbar-url">ai-for-kids.app/parent/settings/critical-thinking</div>
+      </div>
+      <div class="device-screen">
+        <div class="app-header">
+          <h2>AI for Kids Settings</h2>
+          <span class="parent-badge">Parent Mode</span>
+        </div>
+
+        <div class="child-profile">
+          <div class="child-avatar">&#x1F9D2;</div>
+          <div class="child-info">
+            <h3>Aarav's Profile</h3>
+            <p>Age 10 - Grade 5 - English, Hindi</p>
+          </div>
+        </div>
+
+        <div class="settings-body">
+          <!-- Critical Thinking Mode -->
+          <div class="setting-section">
+            <div class="setting-section-title">Critical Thinking</div>
+
+            <div class="setting-card active" id="settingSocratic">
+              <div class="setting-row">
+                <div class="setting-left">
+                  <div class="setting-icon green">&#x1F9E0;</div>
+                  <div>
+                    <div class="setting-label">Socratic Mode</div>
+                    <div class="setting-desc">Always ask questions before giving answers</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggleSocratic"></div>
+              </div>
+            </div>
+
+            <div class="setting-card" id="settingHints">
+              <div class="setting-row">
+                <div class="setting-left">
+                  <div class="setting-icon purple">&#x1F4A1;</div>
+                  <div>
+                    <div class="setting-label">Hints, not answers</div>
+                    <div class="setting-desc">Give progressive hints, never full solutions</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggleHints"></div>
+              </div>
+            </div>
+
+            <div class="setting-card" id="settingWhyChain">
+              <div class="setting-row">
+                <div class="setting-left">
+                  <div class="setting-icon orange">&#x2753;</div>
+                  <div>
+                    <div class="setting-label">"Why?" Chain</div>
+                    <div class="setting-desc">Ask "why do you think that?" after each answer</div>
+                  </div>
+                </div>
+                <div class="toggle" id="toggleWhy"></div>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-row">
+                <div class="setting-left">
+                  <div class="setting-icon blue">&#x1F4CA;</div>
+                  <div>
+                    <div class="setting-label">Thinking Difficulty</div>
+                    <div class="setting-desc">How challenging should questions be?</div>
+                  </div>
+                </div>
+              </div>
+              <div class="slider-container">
+                <div class="slider-label">
+                  <span>Gentle</span>
+                  <span>Challenging</span>
+                </div>
+                <div class="slider">
+                  <div class="slider-fill" id="difficultyFill" style="width: 60%"></div>
+                  <div class="slider-thumb" id="difficultyThumb" style="left: 56%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Prompts Section -->
+          <div class="setting-section">
+            <div class="setting-section-title">Custom Instructions (Active)</div>
+
+            <div class="prompt-card visible">
+              <span class="prompt-tag active">Active</span>
+              <p>"When my child asks for homework help, always ask them what they've tried first. Never give the answer directly."</p>
+            </div>
+
+            <div class="prompt-card visible">
+              <span class="prompt-tag active">Active</span>
+              <p>"Use analogies from cricket and cooking to explain math concepts. These are things my child understands well."</p>
+            </div>
+
+            <div class="prompt-card visible">
+              <span class="prompt-tag custom">Custom</span>
+              <p>"If my child seems frustrated, slow down and offer encouragement. Remind them that struggling means their brain is growing."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="device-bottom"><div class="device-touchpad"></div></div>
+    </div>
+
+    <!-- Dashboard Mockup -->
+    <div class="page-header" style="padding-top: 40px;">
+      <span class="badge">Weekly Report</span>
+      <h1>Watch them grow. In real time.</h1>
+      <p>Every week, see exactly how your child's critical thinking is developing. No guessing. Real data.</p>
+    </div>
+
+    <div class="device-frame">
+      <div class="device-top-bar"><div class="device-camera"></div></div>
+      <div class="device-toolbar">
+        <div class="toolbar-dots"><span></span><span></span><span></span></div>
+        <div class="toolbar-url">ai-for-kids.app/parent/dashboard/aarav</div>
+      </div>
+      <div class="device-screen">
+        <div class="app-header" style="background: #1B5E3A;">
+          <h2>Aarav's Learning Dashboard</h2>
+          <span class="parent-badge">This Week</span>
+        </div>
+
+        <div class="dashboard-body">
+          <!-- Top Stats Row -->
+          <div class="dash-stats">
+            <div class="dash-stat-card">
+              <div class="dash-stat-number up">87%</div>
+              <div class="dash-stat-label">Critical Thinking Score</div>
+              <div class="dash-stat-change positive">+12% from last week</div>
+            </div>
+            <div class="dash-stat-card">
+              <div class="dash-stat-number">14</div>
+              <div class="dash-stat-label">Problems Solved Independently</div>
+              <div class="dash-stat-change positive">+5 from last week</div>
+            </div>
+            <div class="dash-stat-card">
+              <div class="dash-stat-number">3.2</div>
+              <div class="dash-stat-label">Avg. "Why?" Depth</div>
+              <div class="dash-stat-change positive">Deeper reasoning</div>
+            </div>
+          </div>
+
+          <!-- Weekly Progress Chart -->
+          <div class="dash-section">
+            <div class="dash-section-title">Critical Thinking Growth (8 weeks)</div>
+            <div class="dash-chart">
+              <div class="chart-bars">
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 35%"><span>42</span></div>
+                  <div class="chart-label">W1</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 40%"><span>48</span></div>
+                  <div class="chart-label">W2</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 48%"><span>55</span></div>
+                  <div class="chart-label">W3</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 52%"><span>60</span></div>
+                  <div class="chart-label">W4</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 58%"><span>66</span></div>
+                  <div class="chart-label">W5</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 65%"><span>72</span></div>
+                  <div class="chart-label">W6</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar" style="height: 72%"><span>79</span></div>
+                  <div class="chart-label">W7</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar highlight" style="height: 82%"><span>87</span></div>
+                  <div class="chart-label">W8</div>
+                </div>
+              </div>
+              <div class="chart-baseline"></div>
+            </div>
+          </div>
+
+          <!-- Skills Breakdown -->
+          <div class="dash-section">
+            <div class="dash-section-title">Skills Breakdown</div>
+            <div class="skill-rows">
+              <div class="skill-row">
+                <span class="skill-name">Asking "why"</span>
+                <div class="skill-bar"><div class="skill-fill" style="width: 92%"></div></div>
+                <span class="skill-score">92%</span>
+              </div>
+              <div class="skill-row">
+                <span class="skill-name">Independent solving</span>
+                <div class="skill-bar"><div class="skill-fill" style="width: 78%"></div></div>
+                <span class="skill-score">78%</span>
+              </div>
+              <div class="skill-row">
+                <span class="skill-name">Making connections</span>
+                <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                <span class="skill-score">85%</span>
+              </div>
+              <div class="skill-row">
+                <span class="skill-name">Trying before asking AI</span>
+                <div class="skill-bar"><div class="skill-fill" style="width: 70%"></div></div>
+                <span class="skill-score">70%</span>
+              </div>
+              <div class="skill-row">
+                <span class="skill-name">Explaining reasoning</span>
+                <div class="skill-bar"><div class="skill-fill" style="width: 88%"></div></div>
+                <span class="skill-score">88%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Highlights -->
+          <div class="dash-section">
+            <div class="dash-section-title">This Week's Highlights</div>
+            <div class="highlight-cards">
+              <div class="highlight-card">
+                <span class="highlight-icon">&#x2B50;</span>
+                <div>
+                  <strong>Solved fractions independently</strong>
+                  <p>Aarav solved 3/4 + 2/3 without any hints after the AI guided him through the concept of common denominators.</p>
+                </div>
+              </div>
+              <div class="highlight-card">
+                <span class="highlight-icon">&#x1F4A1;</span>
+                <div>
+                  <strong>Made a real-world connection</strong>
+                  <p>"That's like when you split a pizza!" - connected fractions to sharing food at home.</p>
+                </div>
+              </div>
+              <div class="highlight-card">
+                <span class="highlight-icon">&#x1F3AF;</span>
+                <div>
+                  <strong>Asked "why" 4 levels deep</strong>
+                  <p>During a science session about plants, Aarav asked "but why does sunlight make food?" and kept digging.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parent Tip -->
+          <div class="dash-section">
+            <div class="parent-tip">
+              <span class="tip-icon">&#x1F4AC;</span>
+              <div>
+                <strong>Tip for this week</strong>
+                <p>Aarav is getting confident with math. Try asking him to explain his homework to you at dinner. Teaching others deepens learning.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="device-bottom"><div class="device-touchpad"></div></div>
+    </div>
+
+    <!-- Comparison: ChatGPT Personalization vs AI for Kids -->
+    <div class="section-header">
+      <h2>Already using ChatGPT? Add these today.</h2>
+      <p>You can boost critical thinking right now using ChatGPT's Personalization settings. Here's how.</p>
+    </div>
+
+    <div class="compare-layout">
+      <div class="compare-panel chatgpt">
+        <h3>ChatGPT (Manual Setup)</h3>
+        <p class="panel-sub">Go to Settings > Personalization > Custom Instructions</p>
+        <ol class="step-list">
+          <li>
+            <span class="step-num">1</span>
+            <span>Open ChatGPT > tap your profile icon</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span>Go to Settings > Personalization > Custom Instructions</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span>Paste these prompts in "How would you like ChatGPT to respond?"</span>
+          </li>
+        </ol>
+
+        <div class="chatgpt-prompt">
+          <strong>Paste this:</strong><br><br>
+          "My 10-year-old child uses this account for homework. Please follow these rules:<br><br>
+          1. Never give direct answers. Ask guiding questions first.<br>
+          2. Use age-appropriate language (Grade 5 level).<br>
+          3. When they ask for help, ask what they've already tried.<br>
+          4. Give hints in steps, not full solutions.<br>
+          5. After they solve it, ask: 'How did you figure that out?'<br>
+          6. If they seem stuck for 3+ messages, offer ONE small hint.<br>
+          7. Never use adult language, violence, or mature themes."
+        </div>
+      </div>
+
+      <div class="compare-panel aiforkids">
+        <h3>AI for Kids (Built-in)</h3>
+        <p class="panel-sub">All of this is on by default. Just toggle what you want.</p>
+        <ol class="step-list">
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>Socratic questioning on by default</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>Age-matched language (auto-detected)</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>Progressive hints, never full answers</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>"Why?" chain for deeper reasoning</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>Frustration detection with encouragement</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>Parent dashboard with weekly reports</span>
+          </li>
+          <li>
+            <span class="step-num">&#10003;</span>
+            <span>No adult content, ever. COPPA compliant.</span>
+          </li>
+        </ol>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px; font-style: italic;">No prompts to write. No settings to find. It just works.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <div class="container">
+      <h2>Give your child AI that thinks with them.</h2>
+      <p>Whether you use our tool or configure ChatGPT yourself, we want every child thinking critically.</p>
+      <a href="index.html" class="btn btn-primary">Back to AI for Kids</a>
+    </div>
+  </div>
+
+  <script>
+    // Toggle animations
+    document.querySelectorAll('.toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        toggle.classList.toggle('on');
+        const card = toggle.closest('.setting-card');
+        if (card) card.classList.toggle('active', toggle.classList.contains('on'));
+      });
+    });
+
+    // Animate difficulty slider on scroll
+    let sliderAnimated = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !sliderAnimated) {
+          sliderAnimated = true;
+          setTimeout(() => {
+            document.getElementById('difficultyFill').style.width = '75%';
+            document.getElementById('difficultyThumb').style.left = '71%';
+          }, 800);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const deviceFrame = document.querySelector('.device-frame');
+    if (deviceFrame) observer.observe(deviceFrame);
+
+    // Stagger prompt card animations
+    const promptCards = document.querySelectorAll('.prompt-card');
+    const promptObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 200);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    promptCards.forEach(card => promptObserver.observe(card));
+  </script>
+</body>
+</html>
