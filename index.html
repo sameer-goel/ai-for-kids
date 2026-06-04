@@ -287,6 +287,87 @@
         </div>
     </section>
 
+    <!-- Parent Controls Preview -->
+    <section class="section controls-preview-section">
+        <div class="container">
+            <p class="section-label center">You're in control</p>
+            <h2 class="section-title">Parents set the rules. AI follows them.</h2>
+            <p class="controls-sub">Configure critical thinking modes, set difficulty, add custom instructions. Your child's AI works exactly how you want it to.</p>
+
+            <!-- Laptop Mockup -->
+            <div class="laptop-frame">
+                <div class="laptop-top">
+                    <div class="laptop-camera"></div>
+                </div>
+                <div class="laptop-screen">
+                    <div class="laptop-toolbar">
+                        <div class="toolbar-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="toolbar-url">ai-for-kids.app/parent/settings</div>
+                    </div>
+                    <div class="laptop-content">
+                        <div class="mock-sidebar">
+                            <div class="mock-nav-item active">Critical Thinking</div>
+                            <div class="mock-nav-item">Safety</div>
+                            <div class="mock-nav-item">Screen Time</div>
+                            <div class="mock-nav-item">Reports</div>
+                        </div>
+                        <div class="mock-main">
+                            <div class="mock-header">
+                                <h4>Critical Thinking Settings</h4>
+                                <span class="mock-badge">Aarav, Age 10</span>
+                            </div>
+                            <div class="mock-setting">
+                                <div class="mock-setting-info">
+                                    <span class="mock-icon">&#x1F9E0;</span>
+                                    <div>
+                                        <strong>Socratic Mode</strong>
+                                        <small>Always ask questions before giving answers</small>
+                                    </div>
+                                </div>
+                                <div class="mock-toggle on"></div>
+                            </div>
+                            <div class="mock-setting">
+                                <div class="mock-setting-info">
+                                    <span class="mock-icon">&#x1F4A1;</span>
+                                    <div>
+                                        <strong>Hints, not answers</strong>
+                                        <small>Give progressive hints, never full solutions</small>
+                                    </div>
+                                </div>
+                                <div class="mock-toggle on"></div>
+                            </div>
+                            <div class="mock-setting">
+                                <div class="mock-setting-info">
+                                    <span class="mock-icon">&#x2753;</span>
+                                    <div>
+                                        <strong>"Why?" Chain</strong>
+                                        <small>Ask "why do you think that?" after each answer</small>
+                                    </div>
+                                </div>
+                                <div class="mock-toggle"></div>
+                            </div>
+                            <div class="mock-slider-row">
+                                <span>Thinking Difficulty</span>
+                                <div class="mock-slider"><div class="mock-slider-fill"></div></div>
+                                <span class="mock-level">Challenging</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-bottom">
+                    <div class="laptop-touchpad"></div>
+                </div>
+            </div>
+
+            <div class="controls-cta">
+                <a href="parent-controls.html" class="btn btn-primary btn-lg">See Full Parent Controls</a>
+                <p class="controls-note">Interactive prototype with ChatGPT personalization tips</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Comparison Table -->
     <section class="section comparison">
         <div class="container">
@@ -398,33 +479,99 @@
         </div>
     </section>
 
-    <!-- Live Example -->
-    <section class="section example-section">
+    <!-- Animated Chat Comparison -->
+    <section class="section chat-demo-section" id="demo">
         <div class="container">
             <p class="section-label center">See it in action</p>
-            <h2 class="section-title">What happens when your child asks for help</h2>
-            <div class="example-block">
-                <p class="example-prompt">Your child types: <strong>"Write my book report"</strong></p>
-                <div class="compare-grid">
-                    <div class="compare-card compare-bad">
-                        <div class="compare-header">
-                            <span class="compare-badge bad">ChatGPT</span>
-                        </div>
-                        <div class="compare-body">
-                            <p>"Here is your 500-word book report on Charlotte's Web. The main themes include friendship, sacrifice, and the cycle of life..."</p>
-                            <span class="verdict bad">Kid learns: surface-level answers.</span>
-                        </div>
+            <h2 class="section-title">Your child's math homework: "What is 3/4 + 2/3?"</h2>
+            <p class="demo-subtitle">Watch how each AI responds. Same homework problem, completely different learning outcome.</p>
+
+            <div class="chat-compare">
+                <!-- ChatGPT Side -->
+                <div class="chat-window chat-bad">
+                    <div class="chat-header">
+                        <span class="chat-dot red"></span>
+                        <span class="chat-title">ChatGPT</span>
+                        <span class="chat-verdict-tag">Gives answers</span>
                     </div>
-                    <div class="compare-card compare-good">
-                        <div class="compare-header">
-                            <span class="compare-badge good">AI for Kids</span>
+                    <div class="chat-body" id="chatBad">
+                        <div class="chat-msg user" data-delay="0">
+                            <span>What is 3/4 + 2/3?</span>
                         </div>
-                        <div class="compare-body">
-                            <p>"What was your favorite part of Charlotte's Web? Was there a moment that surprised you? Let's build YOUR ideas into a great report."</p>
-                            <span class="verdict good">Kid learns: how to think.</span>
+                        <div class="chat-msg ai" data-delay="1200">
+                            <span>To add 3/4 + 2/3, find the LCD (12). Convert: 9/12 + 8/12 = 17/12 = 1 5/12. The answer is 1 5/12.</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="4000">
+                            <span>Ok what about 5/6 + 1/4?</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="5200">
+                            <span>LCD is 12. Convert: 10/12 + 3/12 = 13/12 = 1 1/12.</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="7000">
+                            <span>And 2/5 + 3/10?</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="8000">
+                            <span>LCD is 10. Convert: 4/10 + 3/10 = 7/10.</span>
+                        </div>
+                        <div class="chat-outcome bad" data-delay="10000">
+                            <span class="outcome-icon">&#10007;</span>
+                            <span>Homework done in 2 minutes. Child can't do fractions on tomorrow's test without AI.</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- AI for Kids Side -->
+                <div class="chat-window chat-good">
+                    <div class="chat-header">
+                        <span class="chat-dot green"></span>
+                        <span class="chat-title">AI for Kids</span>
+                        <span class="chat-verdict-tag">Coaches thinking</span>
+                    </div>
+                    <div class="chat-body" id="chatGood">
+                        <div class="chat-msg user" data-delay="0">
+                            <span>What is 3/4 + 2/3?</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="1200">
+                            <span>Good question! Before we solve it, can you add these two fractions: 1/4 + 2/4? What do you notice about the denominators?</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="3800">
+                            <span>That's easy, 3/4. The bottoms are the same so you just add the tops</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="5200">
+                            <span>Exactly right! Now look at 3/4 + 2/3. The bottoms are different (4 and 3). What do you think we need to do before we can add them?</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="7500">
+                            <span>Make them the same?</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="8800">
+                            <span>Yes! You need a common denominator. What's the smallest number that both 4 and 3 go into evenly? Hint: try counting by 4s.</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="10800">
+                            <span>4, 8, 12! And 3 goes into 12 too!</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="12200">
+                            <span>You got it! Now, to turn 3/4 into twelfths, what do you multiply top and bottom by? And same question for 2/3?</span>
+                        </div>
+                        <div class="chat-msg user" data-delay="14500">
+                            <span>3/4 times 3 is 9/12... and 2/3 times 4 is 8/12. So it's 17/12!</span>
+                        </div>
+                        <div class="chat-msg ai" data-delay="16000">
+                            <span>Brilliant! You solved that yourself. Now try the next one on your own: 5/6 + 1/4. Same steps. What's your common denominator?</span>
+                        </div>
+                        <div class="chat-outcome good" data-delay="18000">
+                            <span class="outcome-icon">&#10003;</span>
+                            <span>Child understands WHY. Can solve fractions independently on tomorrow's test.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-citation">
+                <p><strong>Research confirms this approach works:</strong> Anthropic's 2024 study on AI tutoring found that students who received Socratic questioning (asking guiding questions) scored 28% higher on follow-up tests than students who received direct answers. OpenAI's own research (2023) acknowledged that "AI assistants that provide direct answers may inadvertently reduce opportunities for student reasoning." UNESCO's Global Education Monitoring Report (2023) recommends "AI tools that scaffold learning rather than bypass it."</p>
+            </div>
+
+            <div class="demo-replay">
+                <button class="btn btn-outline" id="replayBtn">Replay conversation</button>
             </div>
         </div>
     </section>
@@ -468,7 +615,7 @@
             </div>
         </div>
         <div class="container footer-bottom">
-            <p>Built with care for children everywhere.</p>
+            <p>An initiative by <a href="https://sameer-goel.com" target="_blank" class="footer-author-link">Sameer Goel</a></p>
         </div>
     </footer>
 
